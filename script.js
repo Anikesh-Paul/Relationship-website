@@ -60,7 +60,7 @@ flipCard.addEventListener("click", () => {
   flipCard.classList.toggle("is-flipped");
   flipCard.setAttribute(
     "aria-pressed",
-    flipCard.classList.contains("is-flipped") ? "true" : "false"
+    flipCard.classList.contains("is-flipped") ? "true" : "false",
   );
   registerInteraction(flipCard);
 });
@@ -129,7 +129,12 @@ const resizeScratchCanvas = () => {
 
 const checkScratchReveal = () => {
   if (revealChecked) return;
-  const imageData = scratchCtx.getImageData(0, 0, scratchCanvas.width, scratchCanvas.height);
+  const imageData = scratchCtx.getImageData(
+    0,
+    0,
+    scratchCanvas.width,
+    scratchCanvas.height,
+  );
   let cleared = 0;
   for (let i = 3; i < imageData.data.length; i += 4) {
     if (imageData.data[i] === 0) cleared += 1;
@@ -138,7 +143,9 @@ const checkScratchReveal = () => {
   if (clearedRatio > 0.4) {
     revealChecked = true;
     scratchCard.classList.add("is-revealed");
-    scratchCard.querySelector(".scratch-reveal").setAttribute("aria-hidden", "false");
+    scratchCard
+      .querySelector(".scratch-reveal")
+      .setAttribute("aria-hidden", "false");
     registerInteraction(scratchCard);
   }
 };
@@ -215,18 +222,18 @@ const quizData = [
   {
     question: "What did I notice first about you?",
     options: ["[Your smile]", "[Your eyes]", "[Your laugh]"],
-    correct: 1 // Change this index to the correct answer
+    correct: 1, // Change this index to the correct answer
   },
   {
     question: "What's our favorite thing to do together?",
     options: ["[Watch movies]", "[Cook together]", "[Go for walks]"],
-    correct: 0 // Change this index to the correct answer
+    correct: 0, // Change this index to the correct answer
   },
   {
     question: "What do I love most about you?",
     options: ["[Your kindness]", "[Your humor]", "[Everything]"],
-    correct: 2 // Change this index to the correct answer
-  }
+    correct: 2, // Change this index to the correct answer
+  },
 ];
 
 let currentQuizIndex = 0;
@@ -268,7 +275,7 @@ function handleQuizAnswer(e) {
   const selectedIndex = parseInt(e.target.dataset.index);
   const q = quizData[currentQuizIndex];
   const options = quizOptions.querySelectorAll(".quiz-option");
-  
+
   options.forEach((opt, idx) => {
     opt.disabled = true;
     if (idx === q.correct) {
@@ -297,7 +304,7 @@ function showQuizResult() {
   quizContent.style.display = "none";
   quizResult.classList.add("show");
   quizScore.textContent = `${quizCorrectCount}/${quizData.length}`;
-  
+
   if (quizCorrectCount === quizData.length) {
     quizMessage.textContent = "You know us perfectly! 💕";
   } else if (quizCorrectCount >= quizData.length / 2) {
@@ -313,14 +320,17 @@ if (quizRestart) {
 }
 
 // Initialize quiz when visible
-const quizObserver = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting && !entry.target.dataset.initialized) {
-      entry.target.dataset.initialized = "true";
-      initQuiz();
-    }
-  });
-}, { threshold: 0.3 });
+const quizObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting && !entry.target.dataset.initialized) {
+        entry.target.dataset.initialized = "true";
+        initQuiz();
+      }
+    });
+  },
+  { threshold: 0.3 },
+);
 
 const quizSection = document.getElementById("quiz");
 if (quizSection) quizObserver.observe(quizSection);
@@ -339,7 +349,7 @@ function startHeartsGame() {
   gameStartOverlay.classList.add("hidden");
   gameEndOverlay.classList.add("hidden");
   updateGameDisplay();
-  
+
   gameInterval = setInterval(() => {
     gameTimeLeft--;
     updateGameDisplay();
@@ -353,24 +363,24 @@ function startHeartsGame() {
 
 function spawnHeart() {
   if (!isGameRunning) return;
-  
+
   const heart = document.createElement("div");
   heart.className = "falling-heart";
   heart.textContent = Math.random() > 0.9 ? "💛" : "💕";
   if (heart.textContent === "💛") heart.classList.add("golden");
-  
+
   const gameRect = gameArea.getBoundingClientRect();
   heart.style.left = `${10 + Math.random() * 80}%`;
   heart.style.animationDuration = `${2 + Math.random() * 1.5}s`;
-  
+
   heart.addEventListener("click", () => catchHeart(heart));
   heart.addEventListener("touchstart", (e) => {
     e.preventDefault();
     catchHeart(heart);
   });
-  
+
   gameArea.appendChild(heart);
-  
+
   // Remove heart after animation
   setTimeout(() => {
     if (heart.parentNode) heart.remove();
@@ -382,7 +392,7 @@ function catchHeart(heart) {
   heart.classList.add("caught");
   gameScore += heart.classList.contains("golden") ? 3 : 1;
   updateGameDisplay();
-  
+
   setTimeout(() => heart.remove(), 300);
 }
 
@@ -395,13 +405,13 @@ function endHeartsGame() {
   isGameRunning = false;
   clearInterval(gameInterval);
   clearInterval(heartInterval);
-  
+
   // Remove all hearts
   gameArea.querySelectorAll(".falling-heart").forEach((h) => h.remove());
-  
+
   finalScoreDisplay.textContent = gameScore;
   gameEndOverlay.classList.remove("hidden");
-  
+
   if (gameScore >= 10) {
     triggerConfetti();
   }
@@ -417,7 +427,7 @@ if (envelopeCard) {
     envelopeCard.classList.toggle("is-open");
     registerInteraction(document.getElementById("envelope"));
   });
-  
+
   envelopeCard.addEventListener("keydown", (e) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
@@ -435,7 +445,7 @@ const revealObserver = new IntersectionObserver(
       }
     });
   },
-  { threshold: 0.2 }
+  { threshold: 0.2 },
 );
 
 sections.forEach((section) => revealObserver.observe(section));
