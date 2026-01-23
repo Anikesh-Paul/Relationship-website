@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>For You</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Floating background elements -->
+    <div class="floating-container" id="floatingContainer" aria-hidden="true">
+      <span class="floating-heart">💕</span>
+      <span class="floating-heart">💗</span>
+      <span class="floating-heart">💖</span>
+      <span class="floating-heart">💕</span>
+      <span class="floating-heart">💗</span>
+      <span class="floating-heart">💖</span>
+      <span class="floating-heart">💕</span>
+      <span class="floating-heart">💗</span>
+      <span class="floating-star">✨</span>
+      <span class="floating-star">⭐</span>
+      <span class="floating-star">✨</span>
+      <span class="floating-star">⭐</span>
+    </div>
+
+    <!-- Confetti container -->
+    <div class="confetti-container" id="confettiContainer" aria-hidden="true"></div>
+
+    <div class="entry-gate" id="entryGate" aria-hidden="false">
+      <div class="entry-dot" aria-hidden="true"></div>
+      <p class="entry-text" id="entryText">Ready?</p>
+      <p class="entry-subtext">A little surprise awaits...</p>
+      <button class="entry-button" id="entryButton" aria-label="Enter the experience">Enter</button>
+    </div>
+
+    <main class="page" id="page" aria-hidden="true">
+      <section class="hero" id="hero">
+        <div class="hero-content">
+          <div class="hero-heart" aria-hidden="true">💕</div>
+          <h1>For you. Obviously.</h1>
+          <p>Scroll slowly.</p>
+        </div>
+        <div class="scroll-indicator" aria-hidden="true">
+          <span></span>
+        </div>
+      </section>
+
+      <!-- Photo Gallery -->
+      <section class="photo-gallery" id="gallery">
+        <header class="section-header">
+          <h2>Us, in pictures</h2>
+          <p>Hover to bring them to life.</p>
+        </header>
+        <div class="gallery-grid">
+          <div class="polaroid">
+            <div class="polaroid-image">[Photo 1]</div>
+            <p class="polaroid-caption">[Caption 1]</p>
+          </div>
+          <div class="polaroid">
+            <div class="polaroid-image">[Photo 2]</div>
+            <p class="polaroid-caption">[Caption 2]</p>
+          </div>
+          <div class="polaroid">
+            <div class="polaroid-image">[Photo 3]</div>
+            <p class="polaroid-caption">[Caption 3]</p>
+          </div>
+          <div class="polaroid">
+            <div class="polaroid-image">[Photo 4]</div>
+            <p class="polaroid-caption">[Caption 4]</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="collection" id="collection">
+        <header class="section-header">
+          <h2>A few small things</h2>
+          <p>Tap, hold, and discover.</p>
+        </header>
+        <div class="cards">
+          <article class="card flip-card" data-interaction="flip" role="button" tabindex="0" aria-pressed="false">
+            <div class="flip-inner">
+              <div class="flip-front">
+                <p class="card-label">The first one</p>
+                <h3>Tap to flip</h3>
+              </div>
+              <div class="flip-back">
+                <p>[City], [Month Year]. You wore [detail]. I forgot how to talk.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card hold-card" data-interaction="hold" role="button" tabindex="0" aria-pressed="false">
+            <p class="card-label">Your words</p>
+            <h3>Hold here. Be patient.</h3>
+            <div class="hold-progress" aria-hidden="true"></div>
+            <p class="hold-reveal" aria-hidden="true">
+              You always say "[phrase]." I never get tired of it.
+            </p>
+          </article>
+
+          <article class="card scratch-card" data-interaction="scratch">
+            <p class="card-label">Why I steal your [item]</p>
+            <h3>Scratch gently</h3>
+            <canvas
+              class="scratch-canvas"
+              width="320"
+              height="200"
+              tabindex="0"
+              role="button"
+              aria-label="Scratch to reveal a message"
+            ></canvas>
+            <p class="scratch-reveal" aria-hidden="true">Because it smells like you. Obviously.</p>
+          </article>
+
+          <article class="card slider-card" data-interaction="slider">
+            <p class="card-label">[Time], remember?</p>
+            <h3>How much did I love that moment?</h3>
+            <input
+              type="range"
+              min="0"
+              max="3"
+              step="1"
+              value="0"
+              class="slider"
+              aria-label="How much did I love that moment"
+            />
+            <p class="slider-response" aria-live="polite">A lot.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Love Quiz Game -->
+      <section class="quiz-section" id="quiz">
+        <header class="section-header">
+          <h2>A tiny quiz</h2>
+          <p>Let's see how well you know us.</p>
+        </header>
+        <div class="quiz-container">
+          <div class="quiz-progress" id="quizProgress">
+            <span class="quiz-dot active"></span>
+            <span class="quiz-dot"></span>
+            <span class="quiz-dot"></span>
+          </div>
+          <div class="quiz-content" id="quizContent">
+            <p class="quiz-question" id="quizQuestion">What did I notice first about you?</p>
+            <div class="quiz-options" id="quizOptions">
+              <button class="quiz-option" data-index="0">[Your smile]</button>
+              <button class="quiz-option" data-index="1">[Your eyes]</button>
+              <button class="quiz-option" data-index="2">[Your laugh]</button>
+            </div>
+          </div>
+          <div class="quiz-result" id="quizResult">
+            <p class="quiz-score" id="quizScore">3/3</p>
+            <p class="quiz-message" id="quizMessage">You know us so well! 💕</p>
+            <button class="quiz-restart" id="quizRestart">Play Again</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Catch Hearts Game -->
+      <section class="hearts-game-section" id="heartsGame">
+        <header class="section-header">
+          <h2>Catch my hearts</h2>
+          <p>Tap the falling hearts before they disappear!</p>
+        </header>
+        <div class="hearts-game-container">
+          <div class="hearts-game-area" id="gameArea">
+            <div class="hearts-game-timer" id="gameTimer">15s</div>
+            <div class="hearts-game-score" id="gameScore">💕 0</div>
+            <div class="game-start-overlay" id="gameStartOverlay">
+              <p class="game-title">Ready to play?</p>
+              <button class="game-btn" id="gameStartBtn">Start</button>
+            </div>
+            <div class="game-end-overlay hidden" id="gameEndOverlay">
+              <p class="game-title">Amazing!</p>
+              <p class="final-score" id="finalScore">0</p>
+              <p>hearts caught!</p>
+              <button class="game-btn" id="gameRestartBtn">Play Again</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Surprise Envelope -->
+      <section class="envelope-section" id="envelope">
+        <header class="section-header">
+          <h2>One more thing...</h2>
+          <p>Open the envelope.</p>
+        </header>
+        <div class="envelope-container">
+          <div class="envelope" id="envelopeCard" role="button" tabindex="0" aria-label="Click to open envelope">
+            <div class="envelope-flap"></div>
+            <div class="envelope-body"></div>
+            <div class="envelope-heart">💌</div>
+            <div class="envelope-letter">
+              <p>[Your special message here — keep it short and sweet]</p>
+            </div>
+          </div>
+          <p class="envelope-hint">Tap to open</p>
+        </div>
+      </section>
+
+      <section class="timeline" id="timeline">
+        <header class="section-header">
+          <h2>Moments, softly</h2>
+          <p>Swipe through the stops.</p>
+        </header>
+        <div class="timeline-track" role="list">
+          <div class="timeline-stop" role="listitem">
+            <span class="stop-date">[Month Year]</span>
+            <p>Day one. I was nervous.</p>
+          </div>
+          <div class="timeline-stop" role="listitem">
+            <span class="stop-date">[Month Year]</span>
+            <p>First trip. [City or joke].</p>
+          </div>
+          <div class="timeline-stop" role="listitem">
+            <span class="stop-date">[Month Year]</span>
+            <p>I knew for sure.</p>
+          </div>
+          <div class="timeline-stop" role="listitem">
+            <span class="stop-date">Now</span>
+            <p>Still.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="hidden-note" id="hiddenNote">
+        <div class="note-card locked" id="noteCard">
+          <p class="note-locked">Not yet.</p>
+          <div class="note-content" aria-hidden="true">
+            <p class="note-intro">I wrote this part last. I meant it most.</p>
+            <p class="note-message">
+              You make ordinary days feel like the best ones. That's everything. — [Initial]
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
