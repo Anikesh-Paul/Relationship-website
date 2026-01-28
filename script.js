@@ -47,6 +47,7 @@ const musicTitle = document.getElementById("musicTitle");
 const audioPlayer = document.getElementById("audioPlayer");
 const musicPrev = document.getElementById("musicPrev");
 const musicNext = document.getElementById("musicNext");
+let musicReady = false;
 
 let interactionCount = 0;
 const interactionTarget = 3;
@@ -67,9 +68,16 @@ const showPage = () => {
     if (musicPlayer) {
       musicPlayer.classList.add("is-visible");
     }
-    if (!isPlaying) {
-      toggleMusic();
-    }
+    // Try to play music, retry if not ready
+    const tryPlay = () => {
+      if (musicReady && !isPlaying) {
+        toggleMusic();
+      } else if (!musicReady) {
+        // Retry after a short delay if music isn't ready
+        setTimeout(tryPlay, 500);
+      }
+    };
+    tryPlay();
   }, 1000);
 };
 
@@ -624,27 +632,53 @@ async function fetchDirectoryListing() {
 }
 
 async function initMusic() {
-  if (!audioPlayer) return;
+  if (!audioPlayer) {
+    console.log("No audio player element found");
+    return;
+  }
 
+  console.log("Initializing music player...");
+  
   const playlist =
     (await fetchPlaylistJson()) || (await fetchDirectoryListing());
   songs = playlist && playlist.length ? playlist : fallbackSongs;
 
-  if (!songs.length) return;
+  console.log("Songs loaded:", songs.length, songs);
+
+  if (!songs.length) {
+    console.log("No songs available");
+    return;
+  }
+  
   // Pick a random song on each page load
   currentSongIndex = Math.floor(Math.random() * songs.length);
   loadSong(currentSongIndex);
+  musicReady = true;
+  console.log("Music ready, loaded song:", songs[currentSongIndex].title);
 }
 
 function loadSong(index) {
   if (songs.length === 0 || !audioPlayer) return;
   const song = songs[index];
-  audioPlayer.src = song.src;
+  // Encode the filename properly - split path and encode just the filename
+  const parts = song.src.split('/');
+  const filename = parts.pop();
+  const encodedFilename = encodeURIComponent(filename);
+  const encodedSrc = parts.join('/') + '/' + encodedFilename;
+  console.log("Loading song:", encodedSrc);
+  audioPlayer.src = encodedSrc;
   if (musicTitle) musicTitle.textContent = song.title;
 }
 
 function toggleMusic() {
   if (!audioPlayer || !musicToggle) return;
+  
+  // Check if music is ready
+  if (!musicReady) {
+    console.log("Music not ready yet");
+    return;
+  }
+  
   if (isPlaying) {
     audioPlayer.pause();
     isPlaying = false;
@@ -691,10 +725,21 @@ function prevSong(shouldPlay = true) {
   playSongAtIndex(currentSongIndex - 1, shouldPlay);
 }
 
-// When song ends, play next random song
+// When song ends, play next song
 if (audioPlayer) {
   audioPlayer.addEventListener("ended", () => {
     nextSong(true);
+  });
+  
+  // Log errors for debugging
+  audioPlayer.addEventListener("error", (e) => {
+    console.error("Audio error:", e);
+    console.error("Failed to load:", audioPlayer.src);
+  });
+  
+  // Log when song loads successfully
+  audioPlayer.addEventListener("canplaythrough", () => {
+    console.log("Song loaded:", audioPlayer.src);
   });
 }
 
