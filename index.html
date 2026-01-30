@@ -10,9 +10,25 @@
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&family=Nunito:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap"
       rel="stylesheet"
     />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <!-- Floating Orbs Background -->
+    <div class="floating-orbs" id="orbsContainer">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+      <div class="orb orb-4"></div>
+      <div class="orb orb-5"></div>
+    </div>
+
+    <!-- Star Field -->
+    <div class="star-field" id="starField"></div>
+
+    <!-- Cursor Trail Container -->
+    <div class="cursor-trail" id="cursorTrail"></div>
+
     <!-- Floating background elements -->
     <div class="floating-container" id="floatingContainer" aria-hidden="true">
       <span class="floating-heart">💕</span>
@@ -187,6 +203,40 @@
         </div>
       </section>
 
+      <!-- Love Meter Section -->
+      <section class="love-meter-section" id="loveMeterSection">
+        <header class="section-header">
+          <h2>How Much I Love You</h2>
+          <p>Spoiler: It's immeasurable</p>
+        </header>
+        <div class="love-meter-container">
+          <div class="meter-frame">
+            <div class="meter-fill" id="meterFill"></div>
+            <div class="meter-bubbles" id="meterBubbles"></div>
+            <span class="meter-value" id="meterValue">∞%</span>
+          </div>
+          <div class="meter-overflow" id="meterOverflow"></div>
+        </div>
+      </section>
+
+      <!-- Virtual Hug Section -->
+      <section class="hug-section" id="hugSection">
+        <header class="section-header">
+          <h2>Sending You a Hug</h2>
+          <p>Press and hold for a warm embrace</p>
+        </header>
+        <div class="hug-container">
+          <button class="hug-button" id="hugButton" aria-label="Send a virtual hug">
+            <span class="hug-emoji">🤗</span>
+            <span class="hug-heart">💕</span>
+            <div class="hug-progress" id="hugProgress"></div>
+          </button>
+          <p class="hug-text" id="hugText">Hold to send love</p>
+          <p class="hug-counter">Hugs shared: <span id="hugCount">0</span></p>
+        </div>
+        <div class="warmth-overlay" id="warmthOverlay"></div>
+      </section>
+
       <!-- Surprise Envelope -->
       <section class="envelope-section" id="envelope">
         <header class="section-header">
@@ -231,6 +281,23 @@
         </div>
       </section>
 
+      <!-- Message in a Bottle Section -->
+      <section class="bottle-section" id="bottleSection">
+        <header class="section-header">
+          <h2>A Message Found Its Way to You</h2>
+          <p>Tap the bottle to read</p>
+        </header>
+        <div class="ocean-container">
+          <div class="wave wave-1"></div>
+          <div class="wave wave-2"></div>
+          <div class="wave wave-3"></div>
+          <div class="bottle" id="messageBottle" role="button" tabindex="0">🍾</div>
+        </div>
+        <div class="bottle-message hidden" id="bottleMessage">
+          <p>Every moment with you feels like discovering treasure. You are my greatest adventure.</p>
+        </div>
+      </section>
+
       <section class="hidden-note" id="hiddenNote">
         <div class="note-card locked" id="noteCard">
           <p class="note-locked">Not yet.</p>
@@ -253,6 +320,20 @@
       </button>
       <button class="music-nav-btn" id="musicNext" aria-label="Next song">⏭</button>
       <p class="music-title" id="musicTitle">Loading...</p>
+    </div>
+
+    <!-- Wish Modal -->
+    <div class="wish-modal-overlay hidden" id="wishModalOverlay">
+      <div class="wish-modal" id="wishModal">
+        <button class="wish-close" id="wishClose">×</button>
+        <div class="wish-star-display">⭐</div>
+        <h3>Make a Wish Upon Our Star</h3>
+        <textarea class="wish-input" id="wishInput" placeholder="Write your wish for us..." maxlength="200"></textarea>
+        <button class="wish-submit" id="wishSubmit">Send to the Stars ✨</button>
+        <div class="wish-success hidden" id="wishSuccess">
+          <p>Your wish has been sent to the stars! 💫</p>
+        </div>
+      </div>
     </div>
 
     <script src="script.js"></script>

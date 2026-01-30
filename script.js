@@ -851,3 +851,222 @@ const newSections = document.querySelectorAll(
   "#reasons, #memoryJar, #firsts, #loveLetter, #countdown",
 );
 newSections.forEach((section) => revealObserver.observe(section));
+
+// ========== STAR FIELD GENERATION ==========
+const starField = document.getElementById('starField');
+if (starField) {
+  for (let i = 0; i < 50; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.left = `${Math.random() * 100}%`;
+    star.style.top = `${Math.random() * 100}%`;
+    const size = 2 + Math.random() * 3;
+    star.style.width = `${size}px`;
+    star.style.height = `${size}px`;
+    star.style.setProperty('--duration', `${2 + Math.random() * 3}s`);
+    star.style.setProperty('--delay', `${Math.random() * 3}s`);
+    star.addEventListener('click', () => openWishModal());
+    starField.appendChild(star);
+  }
+}
+
+// ========== CURSOR HEART TRAIL ==========
+const cursorTrail = document.getElementById('cursorTrail');
+const trailHearts = ['💕', '💗', '✨', '💖'];
+let lastTrailTime = 0;
+
+document.addEventListener('mousemove', (e) => {
+  if (!cursorTrail) return;
+  const now = Date.now();
+  if (now - lastTrailTime < 50) return; // Throttle
+  lastTrailTime = now;
+  
+  const heart = document.createElement('div');
+  heart.className = 'trail-heart';
+  heart.textContent = trailHearts[Math.floor(Math.random() * trailHearts.length)];
+  heart.style.left = `${e.clientX}px`;
+  heart.style.top = `${e.clientY}px`;
+  cursorTrail.appendChild(heart);
+  
+  setTimeout(() => heart.remove(), 800);
+});
+
+// ========== WISH MODAL ==========
+const wishModalOverlay = document.getElementById('wishModalOverlay');
+const wishClose = document.getElementById('wishClose');
+const wishSubmit = document.getElementById('wishSubmit');
+const wishInput = document.getElementById('wishInput');
+const wishSuccess = document.getElementById('wishSuccess');
+
+function openWishModal() {
+  if (wishModalOverlay) {
+    wishModalOverlay.classList.remove('hidden');
+  }
+}
+
+function closeWishModal() {
+  if (wishModalOverlay) {
+    wishModalOverlay.classList.add('hidden');
+    if (wishInput) wishInput.value = '';
+    if (wishSuccess) wishSuccess.classList.add('hidden');
+  }
+}
+
+if (wishClose) {
+  wishClose.addEventListener('click', closeWishModal);
+}
+
+if (wishModalOverlay) {
+  wishModalOverlay.addEventListener('click', (e) => {
+    if (e.target === wishModalOverlay) closeWishModal();
+  });
+}
+
+if (wishSubmit && wishInput && wishSuccess) {
+  wishSubmit.addEventListener('click', () => {
+    if (wishInput.value.trim()) {
+      wishSubmit.style.display = 'none';
+      wishInput.style.display = 'none';
+      wishSuccess.classList.remove('hidden');
+      triggerConfetti();
+      setTimeout(closeWishModal, 2500);
+      setTimeout(() => {
+        wishSubmit.style.display = 'block';
+        wishInput.style.display = 'block';
+      }, 2600);
+    }
+  });
+}
+
+// ========== LOVE METER ==========
+const meterFill = document.getElementById('meterFill');
+const meterBubbles = document.getElementById('meterBubbles');
+const meterOverflow = document.querySelector('.meter-overflow');
+
+const loveMeterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      // Animate meter fill
+      setTimeout(() => {
+        if (meterFill) meterFill.classList.add('animate');
+      }, 300);
+      
+      // Create bubbles
+      if (meterBubbles) {
+        for (let i = 0; i < 10; i++) {
+          setTimeout(() => {
+            const bubble = document.createElement('div');
+            bubble.className = 'meter-bubble';
+            bubble.style.left = `${20 + Math.random() * 60}%`;
+            bubble.style.width = `${5 + Math.random() * 10}px`;
+            bubble.style.height = bubble.style.width;
+            bubble.style.animationDelay = `${Math.random() * 2}s`;
+            meterBubbles.appendChild(bubble);
+          }, i * 200);
+        }
+      }
+      
+      // Overflow hearts
+      if (meterOverflow) {
+        setTimeout(() => {
+          for (let i = 0; i < 5; i++) {
+            setTimeout(() => {
+              const heart = document.createElement('span');
+              heart.className = 'overflow-heart';
+              heart.textContent = '💕';
+              heart.style.animationDelay = `${i * 0.2}s`;
+              meterOverflow.appendChild(heart);
+              setTimeout(() => heart.remove(), 1000);
+            }, i * 200);
+          }
+        }, 2000);
+      }
+      
+      loveMeterObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+const loveMeterSection = document.getElementById('loveMeterSection');
+if (loveMeterSection) loveMeterObserver.observe(loveMeterSection);
+
+// ========== VIRTUAL HUG ==========
+const hugButton = document.getElementById('hugButton');
+const hugText = document.getElementById('hugText');
+const hugCountDisplay = document.getElementById('hugCount');
+const warmthOverlay = document.getElementById('warmthOverlay');
+let hugCount = parseInt(localStorage.getItem('hugCount') || '0');
+let hugTimeout = null;
+
+if (hugCountDisplay) hugCountDisplay.textContent = hugCount;
+
+if (hugButton) {
+  hugButton.addEventListener('pointerdown', () => {
+    hugButton.classList.add('hugging');
+    if (warmthOverlay) warmthOverlay.classList.add('active');
+    if (hugText) hugText.textContent = 'Sending love...';
+    
+    hugTimeout = setTimeout(() => {
+      hugCount++;
+      localStorage.setItem('hugCount', hugCount);
+      if (hugCountDisplay) hugCountDisplay.textContent = hugCount;
+      if (hugText) hugText.textContent = 'Hug sent! 💕';
+      triggerConfetti();
+      
+      setTimeout(() => {
+        if (hugText) hugText.textContent = 'Hold to send love';
+      }, 2000);
+    }, 2000);
+  });
+  
+  const endHug = () => {
+    hugButton.classList.remove('hugging');
+    if (warmthOverlay) warmthOverlay.classList.remove('active');
+    if (hugTimeout) {
+      clearTimeout(hugTimeout);
+      if (hugText) hugText.textContent = 'Hold to send love';
+    }
+  };
+  
+  hugButton.addEventListener('pointerup', endHug);
+  hugButton.addEventListener('pointerleave', endHug);
+}
+
+// ========== MESSAGE IN A BOTTLE ==========
+const messageBottle = document.getElementById('messageBottle');
+const bottleMessage = document.getElementById('bottleMessage');
+
+if (messageBottle && bottleMessage) {
+  messageBottle.addEventListener('click', () => {
+    messageBottle.classList.add('opened');
+    setTimeout(() => {
+      bottleMessage.classList.remove('hidden');
+      bottleMessage.classList.add('visible');
+    }, 400);
+  });
+  
+  messageBottle.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      messageBottle.click();
+    }
+  });
+}
+
+// ========== PARALLAX ORBS ==========
+const orbs = document.querySelectorAll('.orb');
+const orbSpeeds = [0.2, 0.3, 0.15, 0.25, 0.35];
+
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  orbs.forEach((orb, index) => {
+    const speed = orbSpeeds[index] || 0.2;
+    orb.style.transform = `translateY(${scrollY * speed}px)`;
+  });
+}, { passive: true });
+
+// Observe the new sections
+const newSectionsToObserve = document.querySelectorAll('#loveMeterSection, #hugSection, #bottleSection');
+newSectionsToObserve.forEach(section => {
+  if (section) revealObserver.observe(section);
+});
